@@ -1,0 +1,10 @@
+" Tenebrae's .ideavimrc for PyCharm 03.05.2020
+
+set incsearch           " search as characters are entered
+set hlsearch            " highlight matches
+set ignorecase
+set smartcase
+" turn off search highlight
+nnoremap <leader><space> :nohlsearch<CR>
+set easymotion " enable easymotion
+" let g:EasyMotion_do_shade = 0
