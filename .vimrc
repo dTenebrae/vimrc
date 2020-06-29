@@ -14,19 +14,20 @@ Plugin 'gmarik/Vundle.vim'              " let Vundle manage Vundle, required
 
 "---------=== Code/project navigation ===-------------
 Plugin 'scrooloose/nerdtree'            " Project and file navigation
-Bundle 'lpenz/vimcommander'
 "------------------=== Colors ===----------------------
-Plugin 'flazz/vim-colorschemes' "Themes pack
+"Plugin 'flazz/vim-colorschemes' "Themes pack
+Plugin 'morhetz/gruvbox'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes' " Lean & mean status/tabline for vim
 "------------------=== Other ===----------------------
 "Plugin 'rosenfeld/conque-term'      	" Consoles as buffers
-Plugin 'tpope/vim-surround'	   	" Parentheses, brackets, quotes, XML tags, and more
+"Plugin 'tpope/vim-surround'	   	" Parentheses, brackets, etc.
 Plugin 'ervandew/supertab'
+Plugin 'ctrlpvim/ctrlp.vim'
 "---------------=== Languages support ===-------------
 " --- Python ---
 Bundle 'Valloric/YouCompleteMe'
-Plugin 'klen/python-mode'               " Python mode (docs, refactor, lints, highlighting, run and ipdb and more)
+Plugin 'klen/python-mode'
 "Plugin 'scrooloose/syntastic'
 Plugin 'easymotion/vim-easymotion'
 "Plugin 'davidhalter/jedi-vim'           " Jedi-vim autocomplete plugin
@@ -40,16 +41,18 @@ filetype plugin indent on
 "=====================================================
 " General settings
 "=====================================================
-colorscheme molokai " Тема оформления
-let g:airline_theme='molokai' " Тема статусной строки
+colorscheme gruvbox " Тема оформления
+set background=dark
+let g:airline_theme='onedark' " Тема статусной строки
 set cursorline " Подсвечивает строку с курсором
 syntax on " Подсвечивать синтаксис
 set showcmd " Показывает последнюю команду в правом углу
 set noeb vb t_vb= " отключаем пищалку и мигание
 set ruler " Показывать курсор все время
-"set mouse=a
-"set mousemodel=popup
-"set mousehide
+set nobackup
+set nowritebackup
+set noswapfile
+set laststatus=2
 "  при переходе за границу в 80 символов в Python/C/C++ подсвечиваем на темном фоне текст
 augroup vimrc_autocmds
     autocmd!
@@ -78,16 +81,36 @@ autocmd BufWinLeave * call clearmatches()
 "=============Search================================
 set incsearch           " search as characters are entered
 set hlsearch            " highlight matches
+set ignorecase
 set smartcase
 " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
 "====================================================
 set showmatch "Показывает парные скобки
 set number "Номера строк
+set relativenumber
+" create new tabs  {{
+nnoremap <leader>t :tabnew<Enter>
+" Navigating tabs
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+"Previous and next window
+nnoremap <leader>w gt
+nnoremap <leader>W gT
+" Сортировка по лидер+S
+vnoremap <leader>s: sort<CR>
+" ctrlP mapping
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+" Запуск питоновской программы по F9
+autocmd FileType python map <buffer> <F9> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 "=====================================================
 " User hotkeys
 "=====================================================
-
+set pastetoggle=<F2>
+set clipboard=unnamed
 " показать NERDTree на F3
 map <F3> :NERDTreeToggle<CR>
 "игноррируемые файлы с расширениями
@@ -101,7 +124,7 @@ nnoremap <C-H> <C-W><C-H>
 " проверка кода в соответствии с PEP8 через <leader>8
 autocmd FileType python map <buffer> <leader>8 :PymodeLint<CR>
 " запускаем вим коммандер на ф9
-noremap <silent> <F9> :cal VimCommanderToggle()<CR>
+"noremap <silent> <F10> :cal VimCommanderToggle()<CR>
 
 " Python-mode
 " Activate rope
@@ -128,6 +151,8 @@ let g:pymode_lint_checker = "pyflakes,pep8"
 " Auto check on save
 let g:pymode_lint_write = 1
 
+let g:pymode_run = 0
+
 " Support virtualenv
 let g:pymode_virtualenv = 1
 
@@ -146,5 +171,3 @@ let g:pymode_folding = 0
 
 " replace pdb to ipdb
 iab ipdb import ipdb; ipdb.set_trace()
-
-
